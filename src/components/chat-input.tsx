@@ -1,46 +1,56 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState, useRef, useEffect } from "react"
-import { Send } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { useState, useRef, useEffect } from "react";
+import { Send } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 interface ChatInputProps {
-  onSendMessage: (message: string) => void
+  onSendMessage: (message: string) => void;
+  isPending: boolean;
 }
 
-export default function ChatInput({ onSendMessage }: ChatInputProps) {
-  const [input, setInput] = useState("")
-  const [isExpanded, setIsExpanded] = useState(false)
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+export default function ChatInput({
+  onSendMessage,
+  isPending,
+}: ChatInputProps) {
+  const [input, setInput] = useState("");
+  const [isExpanded, setIsExpanded] = useState(false);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
 
   // Auto-resize textarea
   useEffect(() => {
     if (textareaRef.current) {
-      textareaRef.current.style.height = "auto"
-      textareaRef.current.style.height = `${Math.min(textareaRef.current.scrollHeight, 120)}px`
+      textareaRef.current.style.height = "auto";
+      textareaRef.current.style.height = `${Math.min(
+        textareaRef.current.scrollHeight,
+        120
+      )}px`;
     }
-  }, [input])
+  }, [input]);
 
   const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
+    e.preventDefault();
     if (input.trim()) {
-      onSendMessage(input)
-      setInput("")
-      setIsExpanded(false)
+      onSendMessage(input);
+      setInput("");
+      setIsExpanded(false);
     }
-  }
+  };
 
   const handleKeyDown = (e: React.KeyboardEvent) => {
     if (e.key === "Enter" && !e.shiftKey) {
-      e.preventDefault()
-      handleSubmit(e as any)
+      e.preventDefault();
+      handleSubmit(e as any);
     }
-  }
+  };
 
   return (
-    <form onSubmit={handleSubmit} className="border-t border-border bg-card px-4 py-4 sm:px-6">
+    <form
+      onSubmit={handleSubmit}
+      className="border-t border-border bg-card px-4 py-4 sm:px-6"
+    >
       <div className="mx-auto max-w-3xl">
         <div className="flex gap-3 rounded-lg border border-input bg-background p-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
           <textarea
@@ -57,14 +67,16 @@ export default function ChatInput({ onSendMessage }: ChatInputProps) {
           <Button
             type="submit"
             size="icon"
-            disabled={!input.trim()}
-            className="flex-shrink-0 self-end bg-blue-600 hover:bg-blue-700"
+            disabled={!input.trim() || isPending}
+            className="self-end bg-blue-600 hover:bg-blue-700"
           >
             <Send className="h-4 w-4" />
           </Button>
         </div>
-        <p className="mt-2 text-xs text-muted-foreground">Use Shift + Enter to create a new line</p>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Use Shift + Enter to create a new line
+        </p>
       </div>
     </form>
-  )
+  );
 }

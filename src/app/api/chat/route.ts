@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
     // Create chat using v0 SDK
     const chat = await v0.chats.create({ message });
 
-    return NextResponse.json({ chat });
+    return NextResponse.json(chat);
   } catch (error) {
     console.error("Error calling v0 API:", error);
     return NextResponse.json(

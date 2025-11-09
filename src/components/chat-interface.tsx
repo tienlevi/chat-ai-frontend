@@ -5,6 +5,7 @@ import ChatMessages from "./chat-messages";
 import ChatInput from "./chat-input";
 import ChatHeader from "./chat-header";
 import Sidebar from "./sidebar";
+import useChatMessage from "@/hooks/useChatMessage";
 
 export interface Message {
   id: string;
@@ -23,6 +24,9 @@ export default function ChatInterface() {
     },
   ]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
+  const { chatMessage, isPending, data } = useChatMessage();
+  console.log("🚀 ~ handleSendMessage ~ response:", data);
+
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
@@ -33,7 +37,7 @@ export default function ChatInterface() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSendMessage = async (content: string) => {
+  const handleSendMessage = (content: string) => {
     const userMessage: Message = {
       id: Date.now().toString(),
       content,
@@ -42,47 +46,16 @@ export default function ChatInterface() {
     };
 
     setMessages((prev) => [...prev, userMessage]);
+    chatMessage({ message: content });
 
-    try {
-      // Call the API route instead of v0 SDK directly
-      const response = await fetch("/api/v0/chat", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ message: content }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "Failed to get response");
-      }
-
-      const data = await response.json();
-      console.log("🚀 ~ handleSendMessage ~ chat:", data.chat);
-
-      // Handle the AI response from v0
-      const aiMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content:
-          data.chat?.response || "I received your message. Processing...",
-        sender: "ai",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, aiMessage]);
-    } catch (error) {
-      console.error("Error sending message:", error);
-      const errorMessage: Message = {
-        id: (Date.now() + 1).toString(),
-        content:
-          error instanceof Error
-            ? error.message
-            : "Failed to send message. Please try again.",
-        sender: "ai",
-        timestamp: new Date(),
-      };
-      setMessages((prev) => [...prev, errorMessage]);
-    }
+    // const aiMessage: Message = {
+    //   id: (Date.now() + 1).toString(),
+    //   content:
+    //     response.chat?.response || "I received your message. Processing...",
+    //   sender: "ai",
+    //   timestamp: new Date(),
+    // };
+    // setMessages((prev) => [...prev, aiMessage]);
   };
 
   return (
@@ -99,10 +72,13 @@ export default function ChatInterface() {
         <ChatHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
         {/* Messages */}
-        <ChatMessages messages={messages} messagesEndRef={messagesEndRef} />
+        <ChatMessages
+          messages={messages}
+          messagesEndRef={messagesEndRef as any}
+        />
 
         {/* Input */}
-        <ChatInput onSendMessage={handleSendMessage} />
+        <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />
       </div>
     </div>
   );
