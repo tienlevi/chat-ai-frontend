@@ -6,6 +6,7 @@ import ChatInput from "./chat-input";
 import ChatHeader from "./chat-header";
 import Sidebar from "./sidebar";
 import useChatMessage from "@/hooks/useChatMessage";
+import useProjects from "@/hooks/useProjects";
 
 export interface Message {
   id: string;
@@ -24,8 +25,7 @@ export default function ChatInterface() {
     },
   ]);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const { chatMessage, isPending, data } = useChatMessage();
-  console.log("🚀 ~ handleSendMessage ~ response:", data);
+  const { chatMessage, isPending } = useChatMessage();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
