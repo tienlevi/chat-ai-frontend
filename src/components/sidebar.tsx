@@ -2,7 +2,8 @@
 
 import { Plus, MessageSquare, Trash2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import useProjects from "@/hooks/useProjects";
+import { useProjects } from "@/hooks/useProjects";
+import { IProjects } from "@/interfaces/projects";
 
 interface SidebarProps {
   open: boolean;
@@ -10,12 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, onToggle }: SidebarProps) {
-  const { data } = useProjects();
-  const conversations = [
-    { id: 1, title: "Product Brainstorm", date: "Today" },
-    { id: 2, title: "Code Review Help", date: "Yesterday" },
-    { id: 3, title: "Design Feedback", date: "2 days ago" },
-  ];
+  const { data: projects } = useProjects();
 
   return (
     <>
@@ -47,24 +43,24 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
         {/* Conversations */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
-            {conversations.map((conv) => (
+            {projects?.data.map((project) => (
               <button
-                key={conv.id}
+                key={project.id}
                 className="group w-full rounded-lg bg-muted/50 px-3 py-2.5 text-left text-sm transition-colors hover:bg-muted"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex min-w-0 flex-1 items-start gap-2">
-                    <MessageSquare className="mt-0.5 h-4 w-4 flex-shrink-0 text-muted-foreground" />
+                    <MessageSquare className="mt-0.5 h-4 w-4 text-muted-foreground" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-foreground">
-                        {conv.title}
+                        {project.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {conv.date}
+                        {project.createdAt}
                       </p>
                     </div>
                   </div>
-                  <Trash2 className="h-4 w-4 flex-shrink-0 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
+                  <Trash2 className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
               </button>
             ))}
