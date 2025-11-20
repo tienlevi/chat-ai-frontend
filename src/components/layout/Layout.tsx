@@ -21,7 +21,9 @@ export default function Layout({ children }: { children: React.ReactNode }) {
         <ChatHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
 
         {/* Content */}
-        <main className="flex-1 overflow-hidden flex flex-col">{children}</main>
+        <main className="overflow-hidden flex flex-col justify-between">
+          {children}
+        </main>
       </div>
     </div>
   );

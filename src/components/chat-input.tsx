@@ -49,9 +49,9 @@ export default function ChatInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-t border-border bg-card px-4 py-4 sm:px-6"
+      className="border-t border-border bg-card px-4 py-4 sm:px-6 absolute bottom-0 w-full"
     >
-      <div className="mx-auto max-w-3xl">
+      <div className="w-full">
         <div className="flex gap-3 rounded-lg border border-input bg-background p-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
           <textarea
             ref={textareaRef}
@@ -61,7 +61,7 @@ export default function ChatInput({
             onBlur={() => !input && setIsExpanded(false)}
             onKeyDown={handleKeyDown}
             placeholder="Type your message here... (Shift + Enter for new line)"
-            className="flex-1 resize-none bg-transparent text-foreground placeholder-muted-foreground outline-none"
+            className="w-full flex-1 resize-none bg-transparent text-foreground placeholder-muted-foreground outline-none"
             rows={1}
           />
           <Button

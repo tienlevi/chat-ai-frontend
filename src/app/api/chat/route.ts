@@ -41,16 +41,6 @@ export async function POST(request: NextRequest) {
 
 export async function GET(request: NextRequest) {
   try {
-    const { searchParams } = new URL(request.url);
-    const message = searchParams.get("message");
-
-    if (!message || typeof message !== "string") {
-      return NextResponse.json(
-        { error: "Message is required and must be a string" },
-        { status: 400 }
-      );
-    }
-
     // Check if API key is configured
     if (!process.env.V0_API_KEY) {
       return NextResponse.json(
@@ -62,15 +52,15 @@ export async function GET(request: NextRequest) {
       );
     }
 
-    // Create chat using v0 SDK
-    const chat = await v0.chats.create({ message });
+    // get chat using v0 SDK
+    const result = await v0.chats.find({ limit: 10 });
 
-    return NextResponse.json(chat);
+    return NextResponse.json(result);
   } catch (error) {
     console.error("Error calling v0 API:", error);
     return NextResponse.json(
       {
-        error: "Failed to create chat",
+        error: "Failed",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

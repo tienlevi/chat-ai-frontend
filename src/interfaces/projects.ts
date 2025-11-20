@@ -1,3 +1,19 @@
+export interface IChat {
+  id: string;
+  object: "chat";
+  shareable: boolean;
+  privacy: "private" | "public";
+  name: string;
+  title: string;
+  createdAt: string;
+  updatedAt: string;
+  favorite: boolean;
+  authorId: string;
+  projectId: string;
+  webUrl: string;
+  apiUrl: string;
+}
+
 export interface IProject {
   id: string;
   object: "project";
@@ -7,21 +23,7 @@ export interface IProject {
   updatedAt: string;
   apiUrl: string;
   webUrl: string;
-  chats?: {
-    id: string;
-    object: "chat";
-    shareable: boolean;
-    privacy: "private" | "public";
-    name: string;
-    title: string;
-    createdAt: string;
-    updatedAt: string;
-    favorite: boolean;
-    authorId: string;
-    projectId: string;
-    webUrl: string;
-    apiUrl: string;
-  }[];
+  chats?: IChat[];
 }
 
 export interface IProjects {

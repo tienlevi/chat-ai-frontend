@@ -2,8 +2,8 @@
 
 import { Plus, MessageSquare, Trash2, Settings } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useProjects } from "@/hooks/useProjects";
-import { IProjects } from "@/interfaces/projects";
+import Link from "next/link";
+import { useChats } from "@/hooks/useChats";
 
 interface SidebarProps {
   open: boolean;
@@ -11,7 +11,7 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, onToggle }: SidebarProps) {
-  const { data: projects } = useProjects();
+  const { data: projects } = useChats();
 
   return (
     <>
@@ -44,9 +44,10 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
         <div className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
             {projects?.data.map((project) => (
-              <button
+              <Link
+                href={`/chat/${project.id}`}
                 key={project.id}
-                className="group w-full rounded-lg bg-muted/50 px-3 py-2.5 text-left text-sm transition-colors hover:bg-muted"
+                className="group w-full px-3 py-2.5 text-left text-sm"
               >
                 <div className="flex items-start justify-between gap-2">
                   <div className="flex min-w-0 flex-1 items-start gap-2">
@@ -62,7 +63,7 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
                   </div>
                   <Trash2 className="h-4 w-4 text-muted-foreground opacity-0 transition-opacity group-hover:opacity-100" />
                 </div>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
