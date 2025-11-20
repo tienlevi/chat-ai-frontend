@@ -1,5 +1,3 @@
-import ChatInterface from "@/components/chat-interface";
-
 export default function Home() {
-  return <ChatInterface />;
+  return <div className="text-center mt-2">What can I help with?</div>;
 }

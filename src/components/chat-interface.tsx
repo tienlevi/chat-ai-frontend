@@ -3,10 +3,7 @@
 import { useState, useRef, useEffect } from "react";
 import ChatMessages from "./chat-messages";
 import ChatInput from "./chat-input";
-import ChatHeader from "./chat-header";
-import Sidebar from "./sidebar";
 import useChatMessage from "@/hooks/useChatMessage";
-import useProjects from "@/hooks/useProjects";
 
 export interface Message {
   id: string;
@@ -24,7 +21,6 @@ export default function ChatInterface() {
       timestamp: new Date(Date.now() - 60000),
     },
   ]);
-  const [sidebarOpen, setSidebarOpen] = useState(true);
   const { chatMessage, isPending } = useChatMessage();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -59,27 +55,15 @@ export default function ChatInterface() {
   };
 
   return (
-    <div className="flex h-screen bg-background">
-      {/* Sidebar */}
-      <Sidebar
-        open={sidebarOpen}
-        onToggle={() => setSidebarOpen(!sidebarOpen)}
+    <>
+      {/* Messages */}
+      <ChatMessages
+        messages={messages}
+        messagesEndRef={messagesEndRef as any}
       />
 
-      {/* Main Chat Area */}
-      <div className="flex flex-1 flex-col">
-        {/* Header */}
-        <ChatHeader onMenuClick={() => setSidebarOpen(!sidebarOpen)} />
-
-        {/* Messages */}
-        <ChatMessages
-          messages={messages}
-          messagesEndRef={messagesEndRef as any}
-        />
-
-        {/* Input */}
-        <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />
-      </div>
-    </div>
+      {/* Input */}
+      <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />
+    </>
   );
 }
