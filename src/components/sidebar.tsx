@@ -11,7 +11,9 @@ interface SidebarProps {
 }
 
 export default function Sidebar({ open, onToggle }: SidebarProps) {
-  const { data: projects } = useChats();
+  const { data: chats } = useChats();
+
+  console.log(chats);
 
   return (
     <>
@@ -43,10 +45,10 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
         {/* Conversations */}
         <div className="flex-1 overflow-y-auto px-3 py-4">
           <div className="space-y-2">
-            {projects?.data.map((project) => (
+            {chats?.data.map((chat) => (
               <Link
-                href={`/chat/${project.id}`}
-                key={project.id}
+                href={`/chat/${chat.id}`}
+                key={chat.id}
                 className="group w-full px-3 py-2.5 text-left text-sm"
               >
                 <div className="flex items-start justify-between gap-2">
@@ -54,10 +56,10 @@ export default function Sidebar({ open, onToggle }: SidebarProps) {
                     <MessageSquare className="mt-0.5 h-4 w-4 text-muted-foreground" />
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-medium text-foreground">
-                        {project.name}
+                        {chat.name}
                       </p>
                       <p className="text-xs text-muted-foreground">
-                        {project.createdAt}
+                        {chat.createdAt}
                       </p>
                     </div>
                   </div>

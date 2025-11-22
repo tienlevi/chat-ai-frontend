@@ -36,7 +36,10 @@ export default function ChatInterface({ id }: { id: string }) {
   return (
     <>
       {/* Messages */}
-      <ChatMessages messages={[]} messagesEndRef={messagesEndRef as any} />
+      <ChatMessages
+        messages={chats?.data || []}
+        messagesEndRef={messagesEndRef as any}
+      />
 
       {/* Input */}
       <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />
