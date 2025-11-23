@@ -49,7 +49,7 @@ export default function ChatInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-t border-border bg-card px-4 py-4 sm:px-6 absolute bottom-0 w-full"
+      className="border-t border-border bg-card px-4 py-4 sm:px-6 w-full"
     >
       <div className="w-full">
         <div className="flex gap-3 rounded-lg border border-input bg-background p-3 focus-within:border-primary focus-within:ring-1 focus-within:ring-primary">
