@@ -3,7 +3,7 @@ import { v0 } from "v0-sdk";
 
 export async function POST(request: NextRequest) {
   try {
-    const { message } = await request.json();
+    const { message, chatId } = await request.json();
 
     if (!message || typeof message !== "string") {
       return NextResponse.json(
@@ -24,7 +24,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Create chat using v0 SDK
-    const chat = await v0.chats.create({ message, projectId: "" });
+    const chat = await v0.chats.sendMessage({ message, chatId });
 
     return NextResponse.json(chat);
   } catch (error) {
@@ -32,35 +32,6 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       {
         error: "Failed to create chat",
-        details: error instanceof Error ? error.message : "Unknown error",
-      },
-      { status: 500 }
-    );
-  }
-}
-
-export async function GET(request: NextRequest) {
-  try {
-    // Check if API key is configured
-    if (!process.env.V0_API_KEY) {
-      return NextResponse.json(
-        {
-          error:
-            "V0_API_KEY is not configured. Please add it to your .env.local file.",
-        },
-        { status: 500 }
-      );
-    }
-
-    // get chat using v0 SDK
-    const result = await v0.chats.find();
-
-    return NextResponse.json(result);
-  } catch (error) {
-    console.error("Error calling v0 API:", error);
-    return NextResponse.json(
-      {
-        error: "Failed",
         details: error instanceof Error ? error.message : "Unknown error",
       },
       { status: 500 }

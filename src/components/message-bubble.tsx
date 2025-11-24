@@ -40,8 +40,6 @@ export default function MessageBubble({ message }: MessageBubbleProps) {
     ? codeProjectContentMatch[1].trim()
     : null;
 
-  console.log("content", content);
-
   return (
     <>
       <div className={`flex ${isUser ? "justify-end" : "justify-start"}`}>

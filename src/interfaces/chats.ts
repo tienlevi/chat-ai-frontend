@@ -5,12 +5,12 @@ export interface IMessage {
   content: string;
   experimental_content?: MessageBinaryFormat;
   createdAt: string;
-  updatedAt: string;
+  updatedAt?: string;
   type: "message";
   role: "user" | "assistant";
-  apiUrl: string;
-  authorId: string;
-  parentId: string | null;
+  apiUrl?: string;
+  authorId?: string;
+  parentId?: string | null;
 }
 
 export interface IChat {

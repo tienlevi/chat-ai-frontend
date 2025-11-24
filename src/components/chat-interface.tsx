@@ -3,9 +3,12 @@
 import { useRef, useEffect } from "react";
 import ChatMessages from "./chat-messages";
 import ChatInput from "./chat-input";
-import useChatMessage from "@/hooks/useChatMessage";
 
 import { useChatById } from "@/hooks/useChats";
+import useCreateChat from "@/hooks/useCreateChat";
+import useSendMessage from "@/hooks/useSendMessage";
+import { useMessageStore } from "@/stores/useMessageStore";
+import { IMessage } from "@/interfaces/chats";
 
 export interface Message {
   id: string;
@@ -16,8 +19,9 @@ export interface Message {
 
 export default function ChatInterface({ id }: { id: string }) {
   const { data: chats } = useChatById(id);
-
-  const { chatMessage, isPending } = useChatMessage();
+  const { addMessage, getMessages, messages } = useMessageStore();
+  const { chatMessage, isPending } = useCreateChat();
+  const { sendMessage, isPending: isSendPending } = useSendMessage();
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -25,12 +29,19 @@ export default function ChatInterface({ id }: { id: string }) {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  useEffect(() => {
-    scrollToBottom();
-  }, []);
-
   const handleSendMessage = (content: string) => {
-    chatMessage({ message: content });
+    if (id) {
+      addMessage({
+        id: id,
+        content: content,
+        role: "user",
+        createdAt: new Date().toString(),
+        type: "message",
+      });
+      sendMessage({ message: content, chatId: id });
+    } else {
+      chatMessage({ message: content });
+    }
   };
 
   const message =
@@ -39,13 +50,27 @@ export default function ChatInterface({ id }: { id: string }) {
         new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
     ) || [];
 
+  useEffect(() => {
+    scrollToBottom();
+  }, []);
+
+  useEffect(() => {
+    getMessages(message);
+  }, [message]);
+
   return (
     <>
       {/* Messages */}
-      <ChatMessages messages={message} messagesEndRef={messagesEndRef as any} />
+      <ChatMessages
+        messages={messages}
+        messagesEndRef={messagesEndRef as any}
+      />
 
       {/* Input */}
-      <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />
+      <ChatInput
+        onSendMessage={handleSendMessage}
+        isPending={isPending || isSendPending}
+      />
     </>
   );
 }
