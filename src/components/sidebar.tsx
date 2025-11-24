@@ -13,8 +13,6 @@ interface SidebarProps {
 export default function Sidebar({ open, onToggle }: SidebarProps) {
   const { data: chats } = useChats();
 
-  console.log(chats);
-
   return (
     <>
       {/* Mobile overlay */}

@@ -27,19 +27,22 @@ export default function ChatInterface({ id }: { id: string }) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [chats]);
+  }, []);
 
   const handleSendMessage = (content: string) => {
     chatMessage({ message: content });
   };
 
+  const message =
+    chats?.data.sort(
+      (a, b) =>
+        new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+    ) || [];
+
   return (
     <>
       {/* Messages */}
-      <ChatMessages
-        messages={chats?.data || []}
-        messagesEndRef={messagesEndRef as any}
-      />
+      <ChatMessages messages={message} messagesEndRef={messagesEndRef as any} />
 
       {/* Input */}
       <ChatInput onSendMessage={handleSendMessage} isPending={isPending} />

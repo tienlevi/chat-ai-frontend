@@ -1,7 +1,9 @@
+import { MessageBinaryFormat } from "@v0-sdk/react";
+
 export interface IMessage {
   id: string;
   content: string;
-  experimental_content?: any[];
+  experimental_content?: MessageBinaryFormat;
   createdAt: string;
   updatedAt: string;
   type: "message";

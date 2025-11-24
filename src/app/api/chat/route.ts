@@ -53,7 +53,7 @@ export async function GET(request: NextRequest) {
     }
 
     // get chat using v0 SDK
-    const result = await v0.chats.find({ limit: 10 });
+    const result = await v0.chats.find();
 
     return NextResponse.json(result);
   } catch (error) {
